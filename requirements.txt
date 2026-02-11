@@ -1,0 +1,13 @@
+pandas>=2.2.0
+numpy>=1.26.0
+psycopg2-binary>=2.9.9
+sqlalchemy>=2.0.25
+alembic>=1.13.1
+pyspark>=3.5.0
+scikit-learn>=1.4.0
+statsmodels>=0.14.1
+matplotlib>=3.8.2
+seaborn>=0.13.1
+sodapy>=2.2.0
+python-dotenv>=1.0.1
+tqdm>=4.66.1

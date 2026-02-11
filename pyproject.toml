@@ -1,0 +1,33 @@
+[tool.poetry]
+name = "crimecastnyc"
+version = "0.1.0"
+description = "NYPD 911 Call Data Analysis & Prediction Platform"
+authors = ["Anurag Lnu <al5150@g.rit.edu>"]
+readme = "README.md"
+packages = [{include = "src"}]
+
+[tool.poetry.dependencies]
+python = "^3.10"
+pandas = "^2.2.0"
+numpy = "^1.26.0"
+psycopg2-binary = "^2.9.9"
+sqlalchemy = "^2.0.25"
+alembic = "^1.13.1"
+pyspark = "^3.5.0"
+scikit-learn = "^1.4.0"
+statsmodels = "^0.14.1"
+matplotlib = "^3.8.2"
+seaborn = "^0.13.1"
+sodapy = "^2.2.0"
+python-dotenv = "^1.0.1"
+tqdm = "^4.66.1"
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^8.0.0"
+black = "^24.1.1"
+isort = "^5.13.2"
+mypy = "^1.8.0"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
