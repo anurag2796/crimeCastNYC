@@ -37,8 +37,10 @@ def run_pipeline(args):
         predictor = ml.IncidentPredictor()
         
         # Train generic Classification model (High Priority prediction)
-        logger.info("Fetching training data...")
-        df = predictor.fetch_data(limit=50000)
+        logger.info("Fetching training data (Full Dataset)...")
+        # Use args.limit if provided, else None for full DB
+        limit = args.limit if args.limit else None 
+        df = predictor.fetch_data(limit=limit)
         
         if not df.empty:
             logger.info("Training Classifier...")
@@ -49,17 +51,25 @@ def run_pipeline(args):
             
             logger.info("Generating Visualizations...")
             generator.plot_heatmap(df)
-            generator.plot_incident_trends(df, "Combined")
+            generator.plot_incident_trends(df, "2024 Data")
+            generator.plot_crime_by_borough(df)
+            generator.plot_top_crime_types(df)
+            generator.plot_hourly_distribution(df)
+            generator.plot_spatial_scatter(df)
+            generator.plot_priority_distribution(df)
             
             # Mining
-            logger.info("Running Association Rule Mining...")
-            miner = mining.AssociationRuleMiner(min_support=0.01, min_confidence=0.5)
-            # Use same DF for mining transactions if applicable, or fetch fresh
-            # For demo, we just print status
-            # transactions = miner.load_transactions() 
-            # miner.get_frequent_itemsets(transactions)
-            # rules = miner.generate_rules()
-            # print(f"Discovered {len(rules)} rules.")
+            logger.info("Running Association Rule Mining (Optimized)...")
+            miner = mining.AssociationRuleMiner(min_support=0.001, min_confidence=0.01)
+            basket = miner.load_transactions_df()
+            if basket is not None:
+                rules_df = miner.mine_rules(basket)
+                logger.info(f"Discovered {len(rules_df)} rules.")
+                if not rules_df.empty:
+                    print(rules_df.head())
+                    generator.plot_association_rules(rules_df)
+            else:
+                logger.warning("No transactions found for mining.")
         else:
             logger.warning("No data found in DB to analyze. Please ensure 'load' step ran successfully.")
 

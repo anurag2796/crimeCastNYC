@@ -43,6 +43,39 @@ def load_parquet_to_postgres(processed_dir):
         
     cursor = conn.cursor()
     
+    # Create Table if not exists
+    create_table_query = """
+    CREATE TABLE IF NOT EXISTS calls_for_service (
+        cad_evnt_id TEXT,
+        created_date DATE,
+        incident_date DATE,
+        incident_time TIME,
+        ny_cli TEXT,
+        arrival_time TIME,
+        closing_time TIME,
+        vol_id TEXT,
+        precinct_id FLOAT,
+        sector_id TEXT,
+        borough TEXT,
+        patrol_boro TEXT,
+        complaint_type TEXT,
+        descriptor TEXT,
+        location_type_code TEXT,
+        city TEXT,
+        latitude FLOAT,
+        longitude FLOAT
+    );
+    TRUNCATE TABLE calls_for_service;
+    """
+    if not is_sqlite:
+        try:
+            cursor.execute(create_table_query)
+            conn.commit()
+            print("Table 'calls_for_service' created/truncated.")
+        except Exception as e:
+            print(f"Error creating table: {e}")
+            conn.rollback()
+
     try:
         for file in tqdm(files, desc="Loading Files"):
             df = pd.read_parquet(file)

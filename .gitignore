@@ -14,6 +14,7 @@ build/
 
 # Data directories
 data/
+!data/output/plots/
 legacy/
 *.csv
 *.parquet
@@ -47,3 +48,4 @@ logs/
 # Environment
 .env
 .env.local
+extract_pdf_text.py

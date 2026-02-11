@@ -24,6 +24,8 @@ class IncidentPredictor:
         import sqlite3
         is_sqlite = isinstance(conn, sqlite3.Connection)
         
+        limit_clause = f"LIMIT {limit}" if limit else ""
+        
         if is_sqlite:
             # Use substr for hour extraction (HH:MM:SS -> HH)
             query = f"""
@@ -38,7 +40,7 @@ class IncidentPredictor:
                     complaint_type
                 FROM calls_for_service
                 WHERE latitude IS NOT NULL AND longitude IS NOT NULL
-                LIMIT {limit}
+                {limit_clause}
             """
         else:
             query = f"""
@@ -53,7 +55,7 @@ class IncidentPredictor:
                     complaint_type
                 FROM calls_for_service
                 WHERE latitude IS NOT NULL AND longitude IS NOT NULL
-                LIMIT {limit}
+                {limit_clause}
             """
 
         try:
